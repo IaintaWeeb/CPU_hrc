@@ -8,25 +8,28 @@ entity Datapath is
         clock, reset:in std_logic;
 
         --Input from FSM, basically Control Variables
-        alu_sel:in std_logic_vector(1 downto 0);    
-        A1_sel : in std_logic_vector(1 downto 0);
-        A3_sel : in std_logic_vector(2 downto 0);
-        D3_sel : in std_logic_vector(2 downto 0);
-        Reg_file_EN, mem_WR_Internal: in std_logic;
-        C_ctrl, Z_ctrl: in std_logic;
-        T1_WR,T2_WR,T3_WR,T4_WR,loop_count_WR: in std_logic;        
-        ALU_A_sel: in std_logic_vector(2 downto 0);
-        ALU_B_sel, Mem_Add_Sel, Mem_In_Sel: in std_logic_vector(1 downto 0);
-        T3_sel,T4_sel: in std_logic;
-        loop_sel:in std_logic;
+            --Muxes
+            alu_sel:in std_logic_vector(1 downto 0);    
+            A1_sel : in std_logic_vector(1 downto 0);
+            A3_sel : in std_logic_vector(2 downto 0);
+            D3_sel : in std_logic_vector(2 downto 0);
+            ALU_A_sel: in std_logic_vector(2 downto 0);
+            ALU_B_sel, Mem_Add_Sel, Mem_In_Sel: in std_logic_vector(1 downto 0);
+            T3_sel,T4_sel: in std_logic;
+
+            --Write Enables and Reset pin for loop_sel
+            Reg_file_EN, mem_WR_Internal: in std_logic;
+            C_ctrl, Z_ctrl: in std_logic;
+            T1_WR,T2_WR,T3_WR,T4_WR,loop_count_WR: in std_logic;        
+            loop_sel:in std_logic;
         --Outputs to FSM
         Z_flag, C_flag: out std_logic;
         T2_out : buffer std_logic_vector(15 downto 0);
+        instruc:buffer std_logic_vector(15 downto 0);
         loop_count:buffer std_logic_vector(15 downto 0);
         --External Memory Updating Pins
         Mem_Ext_WR :in std_logic;
-        Mem_Ext_Data_in,Mem_Ext_Add : in std_logic_vector(15 downto 0);
-        instruc:buffer std_logic_vector(15 downto 0)
+        Mem_Ext_Data_in,Mem_Ext_Add : in std_logic_vector(15 downto 0)
 		);
 end Datapath;
 
@@ -191,7 +194,7 @@ begin
     Loop_Mux: Mux16_2x1 port map(ALU_C,"0000000000000000",loop_sel,loop_in);
     --Mux for T3 from 00->D1, 01-> ALU_C    
     T3_Mux: MUX16_2x1 port map(A0=> D1,A1=> alu_c, sel =>T3_sel, F=>T3_in);
-	 T4_Mux: MUX16_2x1 port map(A0=> D2,A1=> alu_c, sel =>T4_sel, F=>T4_in);
+	T4_Mux: MUX16_2x1 port map(A0=> D2,A1=> alu_c, sel =>T4_sel, F=>T4_in);
 
 --Register File Instantiate
     Reg_File: Register_file port map (A1, A2, A3, D3, clock, Reg_file_EN, PC, D1, D2);
@@ -213,22 +216,30 @@ begin
     -- 11-> Don't Care condition
     D3_Mux: Mux16_8x1 port map(T1_out,T4_out,mem_out,T3_out,T2_SE7_out,
                                 alu_c,T2_7Shift_out,"0000000000000000",D3_sel,D3);
---Signed Extended signals of intructio(T2)
+        --000-> Stores T1 which is out PC
+        --001-> Temporary register 4
+        --010-> Fetches Memory data
+        --011-> Temporary register 3
+        --100-> 0000000{T2(8 downto 0)}  (Basically adds 7 '0' bits to the MSB of Immediate)
+    --Signed Extended signals of intructio(T2)
     T2_SE7  : SE7 port map(instruc(8 downto 0),T2_SE7_out(15 downto 0))  ;
     T2_SE10 : SE10 port map(instruc(5 downto 0),T2_SE10_out(15 downto 0));
     T2_shift: Shifter7 port map(instruc(8 downto 0),T2_7Shift_out(15 downto 0));
 --Components for ALU
+    --Our ALU <3
     alu1 : ALU port map (ALU_A => alu_a, ALU_B => alu_b, ALU_C => alu_c, C_F => carry_dff_inp, Z_F => zero_dff_inp, sel => alu_sel);
-    
+    --Self Explainatory Inputs to the mux which is controlled using ALU_sel(a control variable
     ALU_A_Mux : Mux16_8x1 port map(A0 => T1_out, A1 => T3_out, A2 => T4_out,A3 => T2_SE10_out,
                             A4=>loop_count,A5=>"0000000000000000",A6=>"0000000000000000",
                             A7=>"0000000000000000", sel => ALU_A_sel, F => alu_a);
     ALU_B_Mux : Mux16_4x1 port map(A0 => T2_SE10_out, A1 => T2_SE7_out, A2 => "0000000000000001", A3 => T4_out, sel => ALU_B_sel, F => alu_b); 
-    
+    --DFF to Store Flags
     carry_dff: dff_en port map(clk => clock, reset => reset, en => C_ctrl, d => carry_dff_inp, q => C_flag);
     zero_dff: dff_en port map(clk => clock, reset => reset, en => Z_ctrl, d => zero_dff_inp, q => Z_flag);
-    
+
+--Components for Memory
     mem : Memory port map(Mem_Add => mem_add, Mem_Data_In => mem_in,Write_Enable => mem_WR,PC_Add=>PC,Instruction_out=>Instruc,clock => clock, Mem_Data_Out => mem_out);
+    --Self Explainatory Muxes
     Mem_Add_Mux_Internal : Mux16_4x1 port map(A0 => D1, A1 =>T3_out, A2 => T4_out, A3 => "0000000000000000", sel =>Mem_Add_Sel,F =>mem_add_internal);
     Mem_In_Mux_Internal : Mux16_4x1 port map(A0 =>T4_out, A1 => D1, A2 => T3_out, A3 => "0000000000000000", sel =>Mem_In_Sel,F =>mem_in_internal);
 
