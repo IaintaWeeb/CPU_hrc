@@ -14,8 +14,8 @@ entity FSM is
         C_ctrl, Z_ctrl: out std_logic;
         T1_WR,T2_WR,T3_WR,T4_WR,loop_count_WR: out std_logic;
         ALU_A_sel: out std_logic_vector(2 downto 0);
-        ALU_B_sel: out std_logic_vector(1 downto 0);
-        T3_sel, Mem_Add_Sel, Mem_In_Sel: out std_logic;
+        ALU_B_sel, Mem_Add_Sel, Mem_In_Sel: out std_logic_vector(1 downto 0);
+        T3_sel,T4_sel: out std_logic;
         loop_sel:out std_logic;
         instruc:in std_logic_vector(15 downto 0)
 		);
@@ -25,14 +25,14 @@ end FSM;
 architecture behave of FSM is
     -------ADD-SUM-------------------------------------------------------------
     type FSM_States   is (S0,S1,S2,S3,S4,S5,S6,S7,S8,S9);
-    signal State : FSM_States;
+    signal State : FSM_States:=S3;
     attribute enum_encoding : string;
     attribute enum_encoding of FSM_States : type is "one-hot";  -- encoding style of the enumerated type
-	 signal Flag: std_logic;
+	signal Flag: std_logic;
 
 begin
     
-process(clock,reset,State)
+State_Transition : process(reset,State,clock)
     variable next_state: FSM_States;
     variable v_alu_sel: std_logic_vector(1 downto 0);    
     variable v_loop_count_WR,v_loop_sel: std_logic;
@@ -43,9 +43,9 @@ process(clock,reset,State)
     variable v_C_ctrl, v_Z_ctrl: std_logic;
     variable v_T1_WR,v_T2_WR,v_T3_WR,v_T4_WR: std_logic;
     variable v_ALU_A_sel: std_logic_vector(2 downto 0);
-    variable v_ALU_B_sel: std_logic_vector(1 downto 0);
-    variable v_T3_sel, v_Mem_Add_Sel, v_Mem_In_Sel: std_logic;
-    variable OP_code :std_logic_vector(3 downto 0);
+    variable v_ALU_B_sel, v_Mem_Add_Sel, v_Mem_In_Sel: std_logic_vector(1 downto 0);
+    variable v_T3_sel,v_T4_sel: std_logic;
+    variable OP_code,OP_code1 :std_logic_vector(3 downto 0);
     variable v_LMSM_Imm :std_logic_vector(7 downto 0);
     begin    
         v_loop_count_WR := '0';
@@ -58,13 +58,14 @@ process(clock,reset,State)
         v_Z_ctrl:='0';
         v_T1_WR:='0';v_T2_WR:='0';v_T3_WR:='0';v_T4_WR:='0';
         v_ALU_A_sel:="000";v_ALU_B_sel:="00";
-        v_T3_sel:='0';
-        v_Mem_Add_Sel:='0';
-        v_Mem_In_Sel:='0';
-        OP_code:= Instruc(15 downto 12);
-        v_LMSM_Imm:=Instruc(7 downto 0);
+        v_T4_sel:='0';
+        v_Mem_Add_Sel:="00";
+        v_Mem_In_Sel:="00";
+        OP_code1:= Instruc(15 downto 12);
+        OP_code:= T2_out(15 downto 12);
+        v_LMSM_Imm:=T2_out(7 downto 0);
         v_loop_sel:='0';
-        Flag<= (((not (Instruc(1))) and (not(Instruc(0)))) or (Instruc(1)and C_flag) or (Instruc(0)and Z_flag));
+        Flag<= (((not (T2_out(1))) and (not(T2_out(0)))) or (T2_out(1)and C_flag) or (T2_out(0)and Z_flag));
 
 case State is --  making cases for states 
  
@@ -72,10 +73,10 @@ case State is --  making cases for states
     when S0 =>
         v_A1_sel:="01";
         v_T1_WR:='1' ;
-        v_Mem_Add_Sel:='0';
+        v_Mem_Add_Sel:="00";
         v_T2_WR:='1';
 
-        if(OP_code="0011") then
+        if(OP_code1="0011") then
             next_state:=S8;
         else next_state:= S1;
         end if;
@@ -132,17 +133,19 @@ case State is --  making cases for states
         end if;
 -----------------------------------		 
     when S2 =>
-        v_T3_sel:='1';
-        v_T3_WR:='1';
         if(OP_code="0000") then
             v_ALU_A_sel:="001";
             v_ALU_B_sel:="11";
             v_alu_sel:="00";
             v_Z_ctrl:='1';
             v_C_ctrl:='1';
+	         v_T3_sel:='1';
+            v_T3_WR:='1';
             next_state := S8;
 
         elsif (OP_code="0001") then
+			   v_T3_sel:='1';
+            v_T3_WR:='1';
             v_ALU_A_sel:="001";
             v_ALU_B_sel:="00";
             v_alu_sel:="00";
@@ -151,6 +154,8 @@ case State is --  making cases for states
             next_state:= S8;
 
         elsif(OP_code="0010") then
+		      v_T3_sel:='1';
+            v_T3_WR:='1';
             v_ALU_A_sel:="001";
             v_ALU_B_sel:="11";
             v_alu_sel:="01";
@@ -161,15 +166,21 @@ case State is --  making cases for states
             v_ALU_A_sel:="011";
             v_ALU_B_sel:="11";
             v_alu_sel:="00";
+				v_T4_sel:='1';
+            v_T4_WR:='1';
             next_state:= S4;
 
         elsif(OP_code="0101") then
             v_ALU_A_sel:="011";
             v_ALU_B_sel:="11";
             v_alu_sel:="00";
+				v_T4_sel:='1';
+            v_T4_WR:='1';
             next_state:= S5;
 
         elsif(OP_code="1100") then
+		      v_T3_sel:='1';
+            v_T3_WR:='1';
             v_ALU_A_sel:="001";
             v_ALU_B_sel:="11";
             v_alu_sel:="10";
@@ -235,7 +246,7 @@ case State is --  making cases for states
 -----------------------------------
 
     when S4 => 
-        v_Mem_Add_Sel := '1';
+        v_Mem_Add_Sel := "01";
         v_D3_sel := "010";
         v_Reg_file_EN := '1';
         v_A3_sel := "010";
@@ -243,15 +254,15 @@ case State is --  making cases for states
 
 -----------------------------------
     when S5 =>
-        v_Mem_Add_Sel := '1';
-        v_Mem_In_Sel := '0';
+        v_Mem_Add_Sel := "10";
+        v_Mem_In_Sel := "10";
         v_mem_WR_Internal := '1';
         next_state:=S3;
 
 -------------------------------------
 
 when S6 =>
-        v_Mem_Add_Sel:='1';
+        v_Mem_Add_Sel:="01";
         v_D3_sel:="010";
         v_A3_sel:="011";
         v_Reg_file_EN := v_LMSM_Imm(7-to_integer(unsigned(loop_count)));
@@ -309,8 +320,8 @@ when S6 =>
     
 
     when S9 =>
-        v_Mem_Add_Sel:='1';
-        v_Mem_In_Sel:='1';
+        v_Mem_Add_Sel:="01";
+        v_Mem_In_Sel:="01";
         v_A1_sel:="00";
         v_mem_WR_Internal := v_LMSM_Imm(7-to_integer(unsigned(loop_count)));
         v_ALU_A_sel:="100";
@@ -337,7 +348,6 @@ end case;
 			state <= next_state; 
 		end if;
 	end if;
-	
     --mapping to actual signal
     alu_sel<=v_alu_sel;
     loop_count_WR<=v_loop_count_WR;
@@ -349,15 +359,11 @@ end case;
     Z_ctrl<=v_Z_ctrl;
     T1_WR<=v_T1_WR; T2_WR<=v_T2_WR; T3_WR<=v_T3_WR ; T4_WR<=v_T4_WR;
     ALU_A_sel<=v_ALU_A_sel;ALU_B_sel<=v_ALU_B_sel;
-    T3_sel<=v_T3_sel;
+	 T4_sel<=v_T4_sel;
     Mem_Add_Sel<=v_Mem_Add_Sel;
     Mem_In_Sel<=v_Mem_In_Sel;
 	 loop_sel<= v_loop_sel;
 
     end process;
-	 
---	 clock_process:process(clock,reset)
---		begin
-		
 end behave;
     

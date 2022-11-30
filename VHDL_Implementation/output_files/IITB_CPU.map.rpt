@@ -1,5 +1,5 @@
 Analysis & Elaboration report for IITB_CPU
-Wed Nov 30 16:28:47 2022
+Wed Nov 30 21:30:52 2022
 Quartus Prime Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
 
 
@@ -11,13 +11,15 @@ Quartus Prime Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
   3. Parallel Compilation
   4. Source assignments for FSM:My_FSM
   5. Analysis & Elaboration Settings
-  6. Port Connectivity Checks: "Datapath:My_Datapath|Mux16_4x1:ALU_B_Mux"
-  7. Port Connectivity Checks: "Datapath:My_Datapath|Mux16_8x1:ALU_A_Mux"
-  8. Port Connectivity Checks: "Datapath:My_Datapath|Mux16_8x1:D3_Mux"
-  9. Port Connectivity Checks: "Datapath:My_Datapath|Mux3_8x1:A3_Mux"
- 10. Port Connectivity Checks: "Datapath:My_Datapath|Mux3_4x1:A1_Mux"
- 11. Port Connectivity Checks: "Datapath:My_Datapath|Mux16_2x1:Loop_Mux"
- 12. Analysis & Elaboration Messages
+  6. Port Connectivity Checks: "Datapath:My_Datapath|Mux16_4x1:Mem_In_Mux_Internal"
+  7. Port Connectivity Checks: "Datapath:My_Datapath|Mux16_4x1:Mem_Add_Mux_Internal"
+  8. Port Connectivity Checks: "Datapath:My_Datapath|Mux16_4x1:ALU_B_Mux"
+  9. Port Connectivity Checks: "Datapath:My_Datapath|Mux16_8x1:ALU_A_Mux"
+ 10. Port Connectivity Checks: "Datapath:My_Datapath|Mux16_8x1:D3_Mux"
+ 11. Port Connectivity Checks: "Datapath:My_Datapath|Mux3_8x1:A3_Mux"
+ 12. Port Connectivity Checks: "Datapath:My_Datapath|Mux3_4x1:A1_Mux"
+ 13. Port Connectivity Checks: "Datapath:My_Datapath|Mux16_2x1:Loop_Mux"
+ 14. Analysis & Elaboration Messages
 
 
 
@@ -44,7 +46,7 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------------------------------------------------------------+
 ; Analysis & Elaboration Summary                                                   ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Elaboration Status      ; Successful - Wed Nov 30 16:28:47 2022       ;
+; Analysis & Elaboration Status      ; Successful - Wed Nov 30 21:30:52 2022       ;
 ; Quartus Prime Version              ; 20.1.1 Build 720 11/11/2020 SJ Lite Edition ;
 ; Revision Name                      ; IITB_CPU                                    ;
 ; Top-level Entity Name              ; IITB_CPU                                    ;
@@ -174,6 +176,24 @@ https://fpgasoftware.intel.com/eula.
 +------------------------------------------------------------------+--------------------+--------------------+
 
 
++--------------------------------------------------------------------------------+
+; Port Connectivity Checks: "Datapath:My_Datapath|Mux16_4x1:Mem_In_Mux_Internal" ;
++------+-------+----------+------------------------------------------------------+
+; Port ; Type  ; Severity ; Details                                              ;
++------+-------+----------+------------------------------------------------------+
+; a3   ; Input ; Info     ; Stuck at GND                                         ;
++------+-------+----------+------------------------------------------------------+
+
+
++---------------------------------------------------------------------------------+
+; Port Connectivity Checks: "Datapath:My_Datapath|Mux16_4x1:Mem_Add_Mux_Internal" ;
++------+-------+----------+-------------------------------------------------------+
+; Port ; Type  ; Severity ; Details                                               ;
++------+-------+----------+-------------------------------------------------------+
+; a3   ; Input ; Info     ; Stuck at GND                                          ;
++------+-------+----------+-------------------------------------------------------+
+
+
 +----------------------------------------------------------------------+
 ; Port Connectivity Checks: "Datapath:My_Datapath|Mux16_4x1:ALU_B_Mux" ;
 +-----------+-------+----------+---------------------------------------+
@@ -241,7 +261,7 @@ https://fpgasoftware.intel.com/eula.
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Elaboration
     Info: Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
-    Info: Processing started: Wed Nov 30 16:28:40 2022
+    Info: Processing started: Wed Nov 30 21:30:43 2022
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off IITB_CPU -c IITB_CPU --analysis_and_elaboration
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
@@ -299,40 +319,41 @@ Info (12021): Found 2 design units, including 1 entities, in source file iitb_cp
 Info (12127): Elaborating entity "IITB_CPU" for the top level hierarchy
 Info (12128): Elaborating entity "FSM" for hierarchy "FSM:My_FSM" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/IITB_CPU.vhd Line: 92
 Warning (10492): VHDL Process Statement warning at FSM.vhd(64): signal "instruc" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 64
-Warning (10492): VHDL Process Statement warning at FSM.vhd(65): signal "instruc" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 65
-Warning (10492): VHDL Process Statement warning at FSM.vhd(67): signal "instruc" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 67
-Warning (10492): VHDL Process Statement warning at FSM.vhd(67): signal "C_flag" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 67
-Warning (10492): VHDL Process Statement warning at FSM.vhd(67): signal "Z_flag" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 67
-Warning (10492): VHDL Process Statement warning at FSM.vhd(91): signal "Flag" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 91
-Warning (10492): VHDL Process Statement warning at FSM.vhd(99): signal "Flag" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 99
-Warning (10492): VHDL Process Statement warning at FSM.vhd(223): signal "Z_flag" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 223
-Warning (10492): VHDL Process Statement warning at FSM.vhd(257): signal "loop_count" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 257
-Warning (10492): VHDL Process Statement warning at FSM.vhd(262): signal "loop_count" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 262
-Warning (10492): VHDL Process Statement warning at FSM.vhd(315): signal "loop_count" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 315
-Warning (10492): VHDL Process Statement warning at FSM.vhd(320): signal "loop_count" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 320
+Warning (10492): VHDL Process Statement warning at FSM.vhd(65): signal "T2_out" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 65
+Warning (10492): VHDL Process Statement warning at FSM.vhd(66): signal "T2_out" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 66
+Warning (10492): VHDL Process Statement warning at FSM.vhd(68): signal "T2_out" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 68
+Warning (10492): VHDL Process Statement warning at FSM.vhd(68): signal "C_flag" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 68
+Warning (10492): VHDL Process Statement warning at FSM.vhd(68): signal "Z_flag" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 68
+Warning (10492): VHDL Process Statement warning at FSM.vhd(92): signal "Flag" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 92
+Warning (10492): VHDL Process Statement warning at FSM.vhd(100): signal "Flag" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 100
+Warning (10492): VHDL Process Statement warning at FSM.vhd(234): signal "Z_flag" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 234
+Warning (10492): VHDL Process Statement warning at FSM.vhd(268): signal "loop_count" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 268
+Warning (10492): VHDL Process Statement warning at FSM.vhd(273): signal "loop_count" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 273
+Warning (10492): VHDL Process Statement warning at FSM.vhd(326): signal "loop_count" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 326
+Warning (10492): VHDL Process Statement warning at FSM.vhd(331): signal "loop_count" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/FSM.vhd Line: 331
 Info (12128): Elaborating entity "Datapath" for hierarchy "Datapath:My_Datapath" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/IITB_CPU.vhd Line: 116
 Info (12128): Elaborating entity "Register_16bit" for hierarchy "Datapath:My_Datapath|Register_16bit:T1" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 185
 Info (12128): Elaborating entity "Mux16_2x1" for hierarchy "Datapath:My_Datapath|Mux16_2x1:Loop_Mux" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 191
-Info (12128): Elaborating entity "Register_file" for hierarchy "Datapath:My_Datapath|Register_file:Reg_File" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 196
+Info (12128): Elaborating entity "Register_file" for hierarchy "Datapath:My_Datapath|Register_file:Reg_File" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 197
 Warning (10492): VHDL Process Statement warning at Register_file.vhd(34): signal "Data" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Register_file.vhd Line: 34
 Warning (10492): VHDL Process Statement warning at Register_file.vhd(35): signal "Data" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Register_file.vhd Line: 35
 Warning (10492): VHDL Process Statement warning at Register_file.vhd(36): signal "Data" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Register_file.vhd Line: 36
-Info (12128): Elaborating entity "Mux3_4x1" for hierarchy "Datapath:My_Datapath|Mux3_4x1:A1_Mux" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 202
-Info (12128): Elaborating entity "Mux3_8x1" for hierarchy "Datapath:My_Datapath|Mux3_8x1:A3_Mux" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 207
-Info (12128): Elaborating entity "Mux16_8x1" for hierarchy "Datapath:My_Datapath|Mux16_8x1:D3_Mux" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 213
-Info (12128): Elaborating entity "SE7" for hierarchy "Datapath:My_Datapath|SE7:T2_SE7" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 216
-Info (12128): Elaborating entity "SE10" for hierarchy "Datapath:My_Datapath|SE10:T2_SE10" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 217
-Info (12128): Elaborating entity "Shifter7" for hierarchy "Datapath:My_Datapath|Shifter7:T2_shift" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 218
-Info (12128): Elaborating entity "ALU" for hierarchy "Datapath:My_Datapath|ALU:alu1" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 220
+Info (12128): Elaborating entity "Mux3_4x1" for hierarchy "Datapath:My_Datapath|Mux3_4x1:A1_Mux" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 203
+Info (12128): Elaborating entity "Mux3_8x1" for hierarchy "Datapath:My_Datapath|Mux3_8x1:A3_Mux" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 208
+Info (12128): Elaborating entity "Mux16_8x1" for hierarchy "Datapath:My_Datapath|Mux16_8x1:D3_Mux" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 214
+Info (12128): Elaborating entity "SE7" for hierarchy "Datapath:My_Datapath|SE7:T2_SE7" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 217
+Info (12128): Elaborating entity "SE10" for hierarchy "Datapath:My_Datapath|SE10:T2_SE10" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 218
+Info (12128): Elaborating entity "Shifter7" for hierarchy "Datapath:My_Datapath|Shifter7:T2_shift" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 219
+Info (12128): Elaborating entity "ALU" for hierarchy "Datapath:My_Datapath|ALU:alu1" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 221
 Warning (10036): Verilog HDL or VHDL warning at ALU.vhd(40): object "sum" assigned a value but never read File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/ALU.vhd Line: 40
-Info (12128): Elaborating entity "Mux16_4x1" for hierarchy "Datapath:My_Datapath|Mux16_4x1:ALU_B_Mux" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 225
-Info (12128): Elaborating entity "dff_en" for hierarchy "Datapath:My_Datapath|dff_en:carry_dff" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 227
-Info (12128): Elaborating entity "Memory" for hierarchy "Datapath:My_Datapath|Memory:mem" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 230
+Info (12128): Elaborating entity "Mux16_4x1" for hierarchy "Datapath:My_Datapath|Mux16_4x1:ALU_B_Mux" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 226
+Info (12128): Elaborating entity "dff_en" for hierarchy "Datapath:My_Datapath|dff_en:carry_dff" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 228
+Info (12128): Elaborating entity "Memory" for hierarchy "Datapath:My_Datapath|Memory:mem" File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Datapath.vhdl Line: 231
 Warning (10492): VHDL Process Statement warning at Memory.vhd(37): signal "Data" is read inside the Process Statement but isn't in the Process Statement's sensitivity list File: D:/github/IITB_CPU_final/Final_Project/VHDL_Implementation/Memory.vhd Line: 37
-Info: Quartus Prime Analysis & Elaboration was successful. 0 errors, 18 warnings
-    Info: Peak virtual memory: 4781 megabytes
-    Info: Processing ended: Wed Nov 30 16:28:47 2022
-    Info: Elapsed time: 00:00:07
-    Info: Total CPU time (on all processors): 00:00:15
+Info: Quartus Prime Analysis & Elaboration was successful. 0 errors, 19 warnings
+    Info: Peak virtual memory: 4779 megabytes
+    Info: Processing ended: Wed Nov 30 21:30:52 2022
+    Info: Elapsed time: 00:00:09
+    Info: Total CPU time (on all processors): 00:00:20
 
 
